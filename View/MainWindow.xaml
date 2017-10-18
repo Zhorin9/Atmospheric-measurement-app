@@ -1,0 +1,78 @@
+﻿<Window x:Class="Engineering_Thesis.View.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:UserControl="clr-namespace:EngineeringThesis.View"
+        mc:Ignorable="d"
+        Title="Warunki atmosferyczne" 
+        WindowStartupLocation="CenterOwner"
+        DataContext="{Binding Source={StaticResource Locator}}"  
+        MinHeight ="500" Height="500" 
+        MinWidth="650" Width="650">
+    <Border BorderThickness="4" BorderBrush="#FF1061F0" Background="White">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <StackPanel Orientation="Horizontal" Grid.Column="0">
+                <StackPanel.Resources>
+                    <Style TargetType="Button">
+                        <Setter Property="BorderThickness" Value="2"/>
+                        <Setter Property="Margin" Value="5"/>
+                        <Setter Property="MinWidth" Value="130"/>
+
+                    </Style>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="Background"  Value="{x:Null}"/>
+                        <Setter Property="VerticalAlignment" Value="Center"/>
+                    </Style>
+                    <Style TargetType="Image">
+                        <Setter Property="Stretch" Value="UniformToFill"/>
+                        <Setter Property="Margin" Value="5,0,0,0"/>
+                    </Style>
+                </StackPanel.Resources>
+
+                <Button 
+                    IsEnabled="{Binding Second.MainWindowButtonIsEnabled}" 
+                    Command="{Binding Second.MainWindowClick}" Background="#FFE69C71">
+                    <StackPanel Orientation="Horizontal" Margin="1" >
+                        <TextBlock Text="Okno główne"/>
+                        <Image  Source="/EngineeringThesis;component/Images/home.png" Stretch="UniformToFill"/>
+                    </StackPanel>
+                </Button>
+
+                <Button Background="#FFB0363B"
+                    IsEnabled="{Binding Second.TemperatureButtonIsEnabled}"
+                    Command="{Binding Second.TemperatureWindowClick}">
+                    <StackPanel Orientation="Horizontal" Margin="1" >
+                        <TextBlock Text="Temperatura"/>
+                        <Image  Source="/EngineeringThesis;component/Images/temp.png" Stretch="UniformToFill"/>
+                    </StackPanel>
+                </Button>
+                <Button Background="#FF15BBBB"
+                    IsEnabled="{Binding Second.HumidityButtonIsEnabled}"
+                    Command="{Binding Second.HumidityWindowClick}">
+                    <StackPanel Orientation="Horizontal" Margin="1" >
+                        <TextBlock Text="Wilgotność"/>
+                        <Image  Source="/EngineeringThesis;component/Images/humidity.png"/>
+                    </StackPanel>
+                </Button>
+                <Button Background="#FF99E6B8"
+                    Command="{Binding Second.PressureWindowClick}"
+                    IsEnabled="{Binding Second.PressureButtonIsEnabled}">
+                    <StackPanel Orientation="Horizontal" Margin="1" >
+                        <TextBlock Text="Ciśnienie"/>
+                        <Image  Source="/EngineeringThesis;component/Images/pressure.png"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+            <UserControl:Plot Grid.Row="1" Visibility="{Binding Second.PlotIsVisible}"/>
+            <UserControl:StatisticWindow Width="550" Height="400" Grid.Row="1" Visibility="{Binding Second.StatisticWindowIsVisible}"/>
+
+
+        </Grid>
+    </Border>
+</Window>
