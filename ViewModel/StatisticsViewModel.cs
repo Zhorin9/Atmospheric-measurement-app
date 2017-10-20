@@ -91,10 +91,10 @@ namespace EngineeringThesis.ViewModel
                        select humidity;
 
             LowestHumidity = sort.Last().Humidity.Replace("\r\n\r\n", "");
-            LowestHumidityDate = sort.Last().created_at;
+            LowestHumidityDate = sort.Last().CreatedData;
 
             HighestHumidity = sort.First().Humidity.Replace("\r\n\r\n", "");
-            HighestHumidityDate = sort.First().created_at;
+            HighestHumidityDate = sort.First().CreatedData;
         }
         private void SearchHighLowTemperatureBMP()
         {
@@ -104,10 +104,10 @@ namespace EngineeringThesis.ViewModel
                        select temp;
 
             LowestTemperatureBMP = sort.Last().TemperatureBmp.Replace("\r\n\r\n", "");
-            LowestTemperatureDateBMP = sort.Last().created_at;
+            LowestTemperatureDateBMP = sort.Last().CreatedData;
 
             HighestTemperatureBMP = sort.First().TemperatureBmp.Replace("\r\n\r\n", "");
-            HighestTemperatureDateBMP = sort.First().created_at;
+            HighestTemperatureDateBMP = sort.First().CreatedData;
         }
         private void SearchHighLowTemperatureDHT()
         {
@@ -117,10 +117,10 @@ namespace EngineeringThesis.ViewModel
                        select temp;
 
             LowestTemperatureDHT = sort.Last().TemperatureDht.Replace("\r\n\r\n", "");
-            LowestTemperatureDateDHT = sort.Last().created_at;
+            LowestTemperatureDateDHT = sort.Last().CreatedData;
 
             HighestTemperatureDHT = sort.First().TemperatureDht.Replace("\r\n\r\n", "");
-            HighestTemperatureDateDHT = sort.First().created_at;
+            HighestTemperatureDateDHT = sort.First().CreatedData;
         }
         private void SearchHighLowPressure()
         {
@@ -130,10 +130,10 @@ namespace EngineeringThesis.ViewModel
                        select pressure;
 
             LowestPressure = sort.Last().Pressure.Replace("\r\n\r\n", "");
-            LowestPressureDate = sort.Last().created_at;
+            LowestPressureDate = sort.Last().CreatedData;
 
             HighestPressure = sort.First().Pressure.Replace("\r\n\r\n", "");
-            HighestPressureDate = sort.First().created_at;
+            HighestPressureDate = sort.First().CreatedData;
         }
 
         private void UpdateValues()
