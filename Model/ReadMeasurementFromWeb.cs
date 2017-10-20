@@ -19,7 +19,7 @@ namespace EngineeringThesis.Model
             UrlThingSpeakGetChannelField = "https://api.thingspeak.com/channels/318552/feeds.json?results=";
         }      
         
-        public void ReadAmountOfFeeds()
+        public bool ReadAmountOfFeeds()
         {
             while (amountOfSamples == "0" || amountOfSamples == null)
             {
@@ -28,13 +28,15 @@ namespace EngineeringThesis.Model
                     using (var webClient = new WebClient())
                     {
                         amountOfSamples = webClient.DownloadString(UrlThingSpeakAmountOfMeasurements);
-                    }
-                }
+                    }  
+                }                
                 catch (WebException)
                 {
                     MessageBox.Show("Wystąpił błąd odczytu, spróbuj ponownie");
+                    return false;
                 }
             }
+            return true;
         }
         
         public async Task<RootObject> ReadChannelField()

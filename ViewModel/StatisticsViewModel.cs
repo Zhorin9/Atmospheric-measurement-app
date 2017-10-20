@@ -68,7 +68,8 @@ namespace EngineeringThesis.ViewModel
         {
             ReadButtonIsEnabled = false;
             _ReadMeasurements = new ReadMeasurementFromWeb();
-            _ReadMeasurements.ReadAmountOfFeeds();
+            if (!_ReadMeasurements.ReadAmountOfFeeds())
+                ReadButtonIsEnabled = true;
             _DataFromThingSpeak = await _ReadMeasurements.ReadChannelField();
             SendReadMeasurements();
 
@@ -80,7 +81,7 @@ namespace EngineeringThesis.ViewModel
             SearchHighLowPressure();
 
             UpdateValues();
-            ReadButtonIsEnabled = true;
+            ReadButtonIsEnabled = true;            
         }
 
         private void SearchHighLowHumidity()
