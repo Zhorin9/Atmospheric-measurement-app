@@ -9,39 +9,16 @@ namespace EngineeringThesis.Model
 {
     class ReadMeasurementFromWeb
     {
-        private string UrlThingSpeakAmountOfMeasurements { get; }
-        private string UrlThingSpeakGetChannelField { get; }
-        private string amountOfSamples { get; set; }
+        private readonly string UrlThingSpeakGetChannelField;
+        private string _AmountOfSamples { get; set; }
 
         public ReadMeasurementFromWeb()
         {
-            UrlThingSpeakAmountOfMeasurements = "https://api.thingspeak.com/update?api_key=2DNWLFBAKDV8B2EH&field2=0";
             UrlThingSpeakGetChannelField = "https://api.thingspeak.com/channels/318552/feeds.json?results=";
         }      
-        
-        public bool ReadAmountOfFeeds()
+        public async Task<RootObject> ReadChannelField(int amountOfSamples)
         {
-            while (amountOfSamples == "0" || amountOfSamples == null)
-            {
-                try
-                {
-                    using (var webClient = new WebClient())
-                    {
-                        amountOfSamples = webClient.DownloadString(UrlThingSpeakAmountOfMeasurements);
-                    }  
-                }                
-                catch (WebException)
-                {
-                    MessageBox.Show("Wystąpił błąd odczytu, spróbuj ponownie");
-                    return false;
-                }
-            }
-            return true;
-        }
-        
-        public async Task<RootObject> ReadChannelField()
-        {
-            string url = UrlThingSpeakGetChannelField  + amountOfSamples;
+            string url = UrlThingSpeakGetChannelField + amountOfSamples;
 
             using (var _httpClient = new HttpClient())
             {
@@ -49,7 +26,6 @@ namespace EngineeringThesis.Model
                 var samples = await Task.Run( () =>  JsonConvert.DeserializeObject<RootObject>(json));
                 
                 return  samples;
-
             }
         }
         public async Task<RootObject> ReadChannelLastMeasurements()

@@ -7,10 +7,11 @@ using System;
 using System.ComponentModel;
 using System.Windows.Media;
 using System.Windows.Threading;
+using GalaSoft.MvvmLight;
 
 namespace EngineeringThesis.ViewModel
 {
-    public class MainViewModel :  INotifyPropertyChanged
+    public class MainViewModel :  ViewModelBase
     {
         private DispatcherTimer Timer;
         private PlotModel _CurrentPlotModel;
@@ -20,20 +21,9 @@ namespace EngineeringThesis.ViewModel
             private set
             {
                 _CurrentPlotModel = value;
-                OnPropertyChanged("CurrentPlotModel");
+                RaisePropertyChanged("CurrentPlotModel");
             }
         }
-
-        private int _CurrentWindow { get; set; }
-        public int CurrentWindow
-        {
-            get { return _CurrentWindow; }
-            set
-            {
-                _CurrentWindow = value;
-            }
-        }
-
         private RootObject _DataFromThingSpeak { get; set; }
         private ReadMeasurementFromWeb _ReadMasurements { get; set; }
 
@@ -43,12 +33,12 @@ namespace EngineeringThesis.ViewModel
         {
             _DataFromThingSpeak = new RootObject();
             _ReadMasurements = new ReadMeasurementFromWeb();
+            Timer = new DispatcherTimer();
             Messenger.Default.Register<MvvmMessage>(this,HandleMessage);
-
-            SetupModel();
-             Timer = new DispatcherTimer();
-             Timer.Tick += Timer_Tick;
-             Timer.Interval = new TimeSpan(0,5,0);
+                                   
+            Timer.Tick += Timer_Tick;
+            Timer.Interval = new TimeSpan(0, 5, 0);
+            SetUpModel();
         }
         private void HandleMessage(MvvmMessage message)
         {
@@ -62,7 +52,7 @@ namespace EngineeringThesis.ViewModel
             CurrentPlotModel.ResetAllAxes();
             CurrentPlotModel.InvalidatePlot(true);            
         }
-        private void SetupModel()
+        private void SetUpModel()
         {
             CurrentPlotModel = new PlotModel();
             CurrentPlotModel.Series.Add(new LineSeries { LineStyle = LineStyle.Solid, Color = OxyColors.Red,  });
@@ -97,12 +87,10 @@ namespace EngineeringThesis.ViewModel
             {
                 for (int i = 0; i < _DataFromThingSpeak.Measurements.Count; i++)
                 {
-                    if (Convert.ToDouble(_DataFromThingSpeak.Measurements[i].TemperatureBmp) != 0)
-                        firstSeries.Points.Add(new DataPoint(DateTimeAxis.ToDouble(_DataFromThingSpeak.Measurements[i].CreatedData),
-                            Convert.ToDouble(_DataFromThingSpeak.Measurements[i].TemperatureBmp)));
-                    if (Convert.ToDouble(_DataFromThingSpeak.Measurements[i].TemperatureDht) != 0)
-                        secondSeries.Points.Add(new DataPoint(DateTimeAxis.ToDouble(_DataFromThingSpeak.Measurements[i].CreatedData),
-                            Convert.ToDouble(_DataFromThingSpeak.Measurements[i].TemperatureDht)));
+                    firstSeries.Points.Add(new DataPoint(DateTimeAxis.ToDouble(_DataFromThingSpeak.Measurements[i].CreatedData),
+                        Convert.ToDouble(_DataFromThingSpeak.Measurements[i].TemperatureBmp)));
+                    secondSeries.Points.Add(new DataPoint(DateTimeAxis.ToDouble(_DataFromThingSpeak.Measurements[i].CreatedData),
+                        Convert.ToDouble(_DataFromThingSpeak.Measurements[i].TemperatureDht)));
                 }
                 firstSeries.Title = "Temperatura (BMP280)";
                 secondSeries.Title = "Temperatura (DHT22)";
@@ -114,9 +102,8 @@ namespace EngineeringThesis.ViewModel
             {
                 for (int i = 0; i < _DataFromThingSpeak.Measurements.Count; i++)
                 {
-                    if (Convert.ToDouble(_DataFromThingSpeak.Measurements[i].TemperatureBmp) != 0)
-                        firstSeries.Points.Add(new DataPoint(DateTimeAxis.ToDouble(_DataFromThingSpeak.Measurements[i].CreatedData),
-                            Convert.ToDouble(_DataFromThingSpeak.Measurements[i].Humidity)));
+                    firstSeries.Points.Add(new DataPoint(DateTimeAxis.ToDouble(_DataFromThingSpeak.Measurements[i].CreatedData),
+                        Convert.ToDouble(_DataFromThingSpeak.Measurements[i].Humidity)));
                 }
                 firstSeries.Title = "Wilgotność";
                 secondSeries.Title = "";
@@ -128,9 +115,8 @@ namespace EngineeringThesis.ViewModel
             {
                 for (int i = 0; i < _DataFromThingSpeak.Measurements.Count; i++)
                 {
-                    if (Convert.ToDouble(_DataFromThingSpeak.Measurements[i].TemperatureBmp) != 0)
-                        firstSeries.Points.Add(new DataPoint(DateTimeAxis.ToDouble(_DataFromThingSpeak.Measurements[i].CreatedData),
-                            Convert.ToDouble(_DataFromThingSpeak.Measurements[i].Pressure)));
+                    firstSeries.Points.Add(new DataPoint(DateTimeAxis.ToDouble(_DataFromThingSpeak.Measurements[i].CreatedData),
+                        Convert.ToDouble(_DataFromThingSpeak.Measurements[i].Pressure)));
                 }
                 firstSeries.Title = "Ciśnienie";
                 secondSeries.Title = "";
@@ -140,15 +126,5 @@ namespace EngineeringThesis.ViewModel
             }
             s.XAxis.AbsoluteMinimum = DateTimeAxis.ToDouble(_DataFromThingSpeak.Measurements[0].CreatedData);
         }        
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged(string name)
-        {
-            PropertyChangedEventHandler propertyChanged = PropertyChanged;
-            if (propertyChanged != null)
-            {
-                propertyChanged(this, new PropertyChangedEventArgs(name));
-            }
-        }
     }
 }

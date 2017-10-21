@@ -7,7 +7,7 @@
              xmlns:oxy="http://oxyplot.org/wpf"
              mc:Ignorable="d" 
              DataContext="{Binding Source={StaticResource Locator}}"
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="400" d:DesignWidth="500">
     <Grid>
         <oxy:PlotView Model="{Binding Main.CurrentPlotModel}"  Grid.Row="1" Background="White" Margin="10,6,10,14"/>
     </Grid>

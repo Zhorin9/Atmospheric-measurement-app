@@ -7,9 +7,10 @@
         mc:Ignorable="d"
         Title="Warunki atmosferyczne" 
         WindowStartupLocation="CenterOwner"
-        DataContext="{Binding Source={StaticResource Locator}}"  
+        DataContext="{Binding Source={StaticResource Locator}}" 
+        Icon="/EngineeringThesis;component/Images/appIcon.png"
         MinHeight ="500" Height="500" 
-        MinWidth="650" Width="650">
+        MinWidth="700" Width="650">
     <Border BorderThickness="4" BorderBrush="#FF1061F0" Background="White">
         <Grid>
             <Grid.RowDefinitions>
@@ -69,8 +70,14 @@
                     </StackPanel>
                 </Button>
             </StackPanel>
-            <UserControl:Plot Grid.Row="1" Visibility="{Binding Second.PlotIsVisible}"/>
-            <UserControl:StatisticWindow Width="550" Height="400" Grid.Row="1" Visibility="{Binding Second.StatisticWindowIsVisible}"/>
+            <UserControl:Plot 
+                Grid.Row="1" 
+                Visibility="{Binding Second.PlotIsVisible}"/>
+            <UserControl:StatisticWindow 
+                Width="650" 
+                Height="400"
+                Grid.Row="1"
+                Visibility="{Binding Second.StatisticWindowIsVisible}"/>
 
 
         </Grid>

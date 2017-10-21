@@ -7,7 +7,7 @@ using System.Windows;
 
 namespace EngineeringThesis.ViewModel
 {
-    public class ButtonsViewModel : INotifyPropertyChanged
+    public class ButtonsViewModel : ViewModelBase
     {
         public MainCommand MainWindowClick { get; set; }
         public TemperatureCommand TemperatureWindowClick { get; set; }
@@ -21,7 +21,7 @@ namespace EngineeringThesis.ViewModel
             set
             {
                 _MainWindowButtonIsEnabled = value;
-                OnPropertyChanged("MainWindowButtonIsEnabled");
+                RaisePropertyChanged("MainWindowButtonIsEnabled");
             }
         }
 
@@ -32,7 +32,7 @@ namespace EngineeringThesis.ViewModel
             set
             {
                 _TemperatureButtonIsEnabled = value;
-                OnPropertyChanged("TemperatureButtonIsEnabled");
+                RaisePropertyChanged("TemperatureButtonIsEnabled");
             }
         }
 
@@ -43,7 +43,7 @@ namespace EngineeringThesis.ViewModel
             set
             {
                 _HumidityButtonIsEnabled = value;
-                OnPropertyChanged("HumidityButtonIsEnabled");
+                RaisePropertyChanged("HumidityButtonIsEnabled");
             }
         }
 
@@ -54,7 +54,7 @@ namespace EngineeringThesis.ViewModel
             set
             {
                 _PressureButtonIsEnabled = value;
-                OnPropertyChanged("PressureButtonIsEnabled");
+                RaisePropertyChanged("PressureButtonIsEnabled");
             }
         }
 
@@ -65,7 +65,7 @@ namespace EngineeringThesis.ViewModel
             set
             {
                 _PlotIsVisible = value;
-                OnPropertyChanged("PlotIsVisible");
+                RaisePropertyChanged("PlotIsVisible");
             }
         }
         private Visibility _StatisticWindowIsVisible;
@@ -75,7 +75,7 @@ namespace EngineeringThesis.ViewModel
             set
             {
                 _StatisticWindowIsVisible = value;
-                OnPropertyChanged("StatisticWindowIsVisible");
+                RaisePropertyChanged("StatisticWindowIsVisible");
             }
         }
 
@@ -85,14 +85,22 @@ namespace EngineeringThesis.ViewModel
             TemperatureWindowClick = new TemperatureCommand(this);
             PressureWindowClick = new PressureCommand(this);
             HumidityWindowClick = new HumidityCommand(this);
+            Messenger.Default.Register<MvvmMessage>(this, HandleMessage);
 
+            DisableAllButtons();
+            PlotIsVisible = Visibility.Hidden;            
+        }
+        private void SelectNumberAction(int selectedNumber)
+        {
+            var msg = new MvvmMessage() { SelectedWindow = selectedNumber };
+            Messenger.Default.Send<MvvmMessage>(msg);
+        }
+        private void DisableAllButtons()
+        {
             MainWindowButtonIsEnabled = false;
             TemperatureButtonIsEnabled = false;
             HumidityButtonIsEnabled = false;
             PressureButtonIsEnabled = false;
-            PlotIsVisible = Visibility.Hidden;
-
-            Messenger.Default.Register<MvvmMessage>(this, HandleMessage);
         }
         private void HandleMessage(MvvmMessage message)
         {
@@ -102,15 +110,7 @@ namespace EngineeringThesis.ViewModel
                 HumidityButtonIsEnabled = true;
                 PressureButtonIsEnabled = true;
             }
-
         }
-
-        private void SelectNumberAction(int selectedNumber)
-        {
-            var msg = new MvvmMessage() { SelectedWindow = selectedNumber };
-            Messenger.Default.Send<MvvmMessage>(msg);
-        }
-
         public void MainWindowCommand()
         {
             MainWindowButtonIsEnabled = false;
@@ -150,16 +150,6 @@ namespace EngineeringThesis.ViewModel
             PlotIsVisible = Visibility.Visible;
             StatisticWindowIsVisible = Visibility.Hidden;
             SelectNumberAction(3);
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged(string name)
-        {
-            PropertyChangedEventHandler propertyChanged = PropertyChanged;
-            if (propertyChanged != null)
-            {
-                propertyChanged(this, new PropertyChangedEventArgs(name));
-            }
         }
     }
 }
