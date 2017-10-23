@@ -15,28 +15,44 @@ namespace EngineeringThesis.Model
         public ReadMeasurementFromWeb()
         {
             UrlThingSpeakGetChannelField = "https://api.thingspeak.com/channels/318552/feeds.json?results=";
-        }      
+        }
         public async Task<RootObject> ReadChannelField(int amountOfSamples)
         {
             string url = UrlThingSpeakGetChannelField + amountOfSamples;
-
-            using (var _httpClient = new HttpClient())
+            try
             {
-                var json = await _httpClient.GetStringAsync(url);
-                var samples = await Task.Run( () =>  JsonConvert.DeserializeObject<RootObject>(json));
-                
-                return  samples;
+                using (var _httpClient = new HttpClient())
+                {
+                    var json = await _httpClient.GetStringAsync(url);
+                    var samples = await Task.Run(() => JsonConvert.DeserializeObject<RootObject>(json));
+                    return samples;
+                }
             }
+            catch (HttpRequestException e)
+            {
+                MessageBox.Show("Wystąpił błąd, spróbuj ponownie");
+                return null;
+            }
+
         }
         public async Task<RootObject> ReadChannelLastMeasurements()
         {
             string url = UrlThingSpeakGetChannelField + "1";
-            using (var _httpClient = new HttpClient())
+            try
             {
-                var json = await _httpClient.GetStringAsync(url);
-                var sample = JsonConvert.DeserializeObject<RootObject>(json);
-                return sample;
+                using (var _httpClient = new HttpClient())
+                {
+                    var json = await _httpClient.GetStringAsync(url);
+                    var sample = JsonConvert.DeserializeObject<RootObject>(json);
+                    return sample;
+                }
             }
+            catch (HttpRequestException e)
+            {
+                MessageBox.Show("Nie pobrano najnowszej próbki");
+                return null;
+            }
+
         }
     }
 }

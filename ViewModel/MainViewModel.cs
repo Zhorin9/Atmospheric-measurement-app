@@ -72,9 +72,12 @@ namespace EngineeringThesis.ViewModel
         private async void Timer_Tick(object sender, EventArgs e)
         {
             var read = await _ReadMasurements.ReadChannelLastMeasurements();
-            _DataFromThingSpeak.Measurements.Add(read.Measurements[0]);
-            RedrawGraph(_SelectedWindow);
-            CurrentPlotModel.InvalidatePlot(true);
+            if (read != null)
+            {
+                _DataFromThingSpeak.Measurements.Add(read.Measurements[0]);
+                RedrawGraph(_SelectedWindow);
+                CurrentPlotModel.InvalidatePlot(true);
+            }
         }
         private void RedrawGraph(int selectedWindow)
         {

@@ -97,18 +97,21 @@ namespace EngineeringThesis.ViewModel
         public async void ReadData()
         {
             ReadButtonIsEnabled = false;
-            _ReadMeasurements = new ReadMeasurementFromWeb();
+            _ReadMeasurements = new ReadMeasurementFromWeb();            
             _DataFromThingSpeak = await _ReadMeasurements.ReadChannelField(_SelectedTimeRange);
-            SendReadMeasurements();
+            if (_DataFromThingSpeak != null)
+            { 
+                SendReadMeasurements();
 
-            AmontOfReading = _DataFromThingSpeak.Measurements.Count;
+                AmontOfReading = _DataFromThingSpeak.Measurements.Count;
 
-            SearchHighLowHumidity();
-            SearchHighLowTemperatureBMP();
-            SearchHighLowTemperatureDHT();
-            SearchHighLowPressure();
+                SearchHighLowHumidity();
+                SearchHighLowTemperatureBMP();
+                SearchHighLowTemperatureDHT();
+                SearchHighLowPressure();
 
-            UpdateValues();
+                UpdateValues();
+            }
             ReadButtonIsEnabled = true;            
         }
         private void SearchHighLowHumidity()
